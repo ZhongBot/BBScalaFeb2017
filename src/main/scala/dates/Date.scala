@@ -55,7 +55,7 @@ object Date {
   }
 }
 
-class Date(val day: Int, month: Int, year: Int) {
+class Date(val day: Int, val month: Int, val year: Int) {
   @tailrec
   final def + (days: Int): Date = {
     val newDayTentative = this.day + days
