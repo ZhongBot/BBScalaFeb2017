@@ -60,3 +60,45 @@ object ListStuff {
     println(s"max of 1 to 10 is ${maxOf(moreNums)}")
   }
 }
+
+object Filtering {
+  def filter(l: List[String], predicate: String => Boolean) : List[String] = l match {
+    case List() => List()
+    case h :: t => if (predicate(h)) h :: filter(t, predicate) else filter(t, predicate)
+//    case h :: t => if (predicate.apply(h)) h :: filter(t, predicate) else filter(t, predicate)
+  }
+
+  def showAll(l: List[String]): Unit = {
+    for (x <- l) println(x)
+    println("----------------------------")
+  }
+
+  def main(args: Array[String]): Unit = {
+    val names = "Fred" :: "Jim" :: "Sheila" :: Nil
+    showAll(names)
+
+    showAll(filter(names, s => s.length > 4))
+    showAll(filter(names, s => s.charAt(0) == 'J'))
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
