@@ -68,6 +68,11 @@ object Filtering {
 //    case h :: t => if (predicate.apply(h)) h :: filter(t, predicate) else filter(t, predicate)
   }
 
+  def map(l: List[String], op: String => String): List[String] = l match {
+    case List() => List()
+    case h :: t => op(h) :: map(t, op)
+  }
+
   def showAll(l: List[String]): Unit = {
     for (x <- l) println(x)
     println("----------------------------")
@@ -80,6 +85,8 @@ object Filtering {
     showAll(filter(names, s => s.length > 4))
     showAll(filter(names, s => s.charAt(0) == 'J'))
 
+    showAll(map(names, s => s.toUpperCase))
+    showAll(map(names, s => s.substring(1)))
   }
 }
 
