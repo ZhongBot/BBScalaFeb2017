@@ -9,9 +9,24 @@ object Student {
 
   def or(op1: Student => Boolean, op2: Student => Boolean) : Student => Boolean = s => op1(s) || op2(s)
 
-  def filter(l: List[Student], predicate: Student => Boolean) : List[Student] = l match {
+  def filter[T](l: List[T], predicate: T => Boolean) : List[T] = l match {
     case List() => List()
     case h :: t => if (predicate(h)) h :: filter(t, predicate) else filter(t, predicate)
+  }
+
+  def map[T,U](l: List[T], op: T => U): List[U] = l match {
+    case List() => List()
+    case h :: t => op(h) :: map(t, op)
+  }
+
+  def foreach[T](l: List[T], op: T => Unit): Unit = l match {
+    case List() =>
+    case h :: t => op(h) ; foreach(t, op)
+  }
+
+  def flatMap[T,U](l: List[T], op: T => List[U]): List[U] = l match {
+    case List() => List()
+    case h :: t => op(h) ::: flatMap(t, op)
   }
 }
 
@@ -22,8 +37,14 @@ class Student(val name: String, val gpa: Double) {
 object School {
 
   def showAll(l:List[Student]): Unit = {
-    for (s <- l) println(s)
+    Student.foreach(l, (s: Student) => println(s))
     println("-----------------------")
+  }
+
+  def marketing(s : Student): List[Student] = s.name match {
+    case "Fred" => List(new Student("Fred", 3.4), new Student("Jill", 0.0))
+    case "Jim" => List(new Student("Jim", 3.4), new Student("Tony", 0.0), new Student("William", 0.0))
+    case "Sheila" => List()
   }
 
   def main(args: Array[String]): Unit = {
@@ -42,5 +63,7 @@ object School {
     val midRangeSmart = Student.and(smartish, notOverSmart)
     showAll(Student.filter(school, midRangeSmart))
 
+    showAll(Student.flatMap(school, marketing))
+    Student.foreach(Student.map(school, (s:Student) => s.gpa), println)
   }
 }
