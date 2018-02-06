@@ -5,6 +5,10 @@ object Student {
 
   def not(op: Student => Boolean) : Student => Boolean = s => !op(s)
 
+  def and(op1: Student => Boolean, op2: Student => Boolean) : Student => Boolean = s => op1(s) && op2(s)
+
+  def or(op1: Student => Boolean, op2: Student => Boolean) : Student => Boolean = s => op1(s) || op2(s)
+
   def filter(l: List[Student], predicate: Student => Boolean) : List[Student] = l match {
     case List() => List()
     case h :: t => if (predicate(h)) h :: filter(t, predicate) else filter(t, predicate)
@@ -31,6 +35,12 @@ object School {
     showAll(school)
     showAll(Student.filter(school, Student.getSmartnessPredicate(3.5)))
     showAll(Student.filter(school, Student.not(Student.getSmartnessPredicate(3.5))))
+
+    val smartish = Student.getSmartnessPredicate(3)
+    val verySmart = Student.getSmartnessPredicate((3.7))
+    val notOverSmart = Student.not(verySmart)
+    val midRangeSmart = Student.and(smartish, notOverSmart)
+    showAll(Student.filter(school, midRangeSmart))
 
   }
 }
