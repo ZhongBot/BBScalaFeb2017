@@ -14,6 +14,8 @@ object Pythagoras {
 
 object BigNumbers {
   def main(args: Array[String]): Unit = {
+    val start = System.nanoTime
+
     val values = for {
       twoCols <- 0 to 99 by 2
       colThree <- 0 to 900 by 100
@@ -44,8 +46,9 @@ object BigNumbers {
       nineCols = eightCols + colNine
       if nineCols % 9 == 0
     } yield nineCols
+    val time = System.nanoTime - start
     values.sorted(Ordering.Int)
       .foreach(println)
-    println(s"number of values is ${values.size}")
+    println(f"number of values is ${values.size}, compute time ${time / 1000000000.0}%6.3f seconds")
   }
 }
